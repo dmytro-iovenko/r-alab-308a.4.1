@@ -53,16 +53,6 @@ body {
   top: 50%;
   transform: translateY(-50%);
 }
-@media (min-width: 768px) {
-  .carousel-item {
-    margin-right: 0;
-    flex: 0 0 33.333333%;
-    display: block;
-  }
-  .carousel-inner {
-    display: flex;
-  }
-}
 .card .img-wrapper {
   max-width: 100%;
   display: flex;
@@ -76,4 +66,175 @@ body {
   .card .img-wrapper {
     height: 17em;
   }
+}
+
+@media (min-width: 768px) {
+
+  .carousel-item {
+    width: calc(100% / 3); /* number of items is 3 */
+  }
+
+  .carousel-item.active {
+    display: block;
+  }
+
+  .carousel-item:has(+ .carousel-item.active) {
+    display: block;
+    transform: translateX(-100%);
+  }
+
+  .carousel-inner:has(.carousel-item.active:first-child) .carousel-item:last-child {
+    display: block;
+    transform: translateX(-100%);
+  }
+
+  .carousel-item.active + .carousel-item {
+    display: block;
+    transform: translateX(100%);
+  }
+
+  .carousel-item.active + .carousel-item + .carousel-item {
+    display: block;
+    transform: translateX(200%);
+  }
+
+  .carousel-item.active + .carousel-item + .carousel-item + .carousel-item {
+    display: block;
+    transform: translateX(300%);
+  }
+
+  /** **/
+
+  .carousel-inner:has(.carousel-item.active:last-child) .carousel-item:first-child {
+    display: block;
+    transform: translateX(100%);
+  }
+
+  .carousel-inner:has(.carousel-item.active:last-child) .carousel-item:first-child + .carousel-item {
+    display: block;
+    transform: translateX(200%);
+  }
+
+  .carousel-inner:has(.carousel-item.active:last-child) .carousel-item:first-child + .carousel-item  + .carousel-item {
+    display: block;
+    transform: translateX(300%);
+  }
+
+  .carousel-inner:has(.carousel-item.active:nth-last-child(2)) .carousel-item:first-child {
+    display: block;
+    transform: translateX(200%);
+  }
+
+  .carousel-inner:has(.carousel-item.active:nth-last-child(2)) .carousel-item:first-child + .carousel-item {
+    display: block;
+    transform: translateX(300%);
+  }
+
+  .carousel-inner:has(.carousel-item.active:nth-last-child(3)) .carousel-item:first-child {
+    display: block;
+    transform: translateX(300%);
+  }
+
+  /** NEXT BUTTON **/
+  .carousel-item:has(+ .carousel-item.active.carousel-item-start) {
+    display: none;
+  }
+  .carousel-inner:has(.carousel-item.active.carousel-item-start:first-child) .carousel-item:last-child {
+    display: none;
+  }
+
+  .carousel-item.active.carousel-item-start + .carousel-item {
+    display: block;
+    transform: translateX(0);
+  }
+  
+  .carousel-item.active.carousel-item-start + .carousel-item + .carousel-item {
+    display: block;
+    transform: translateX(100%);
+  }
+  
+  .carousel-item.active.carousel-item-start + .carousel-item + .carousel-item + .carousel-item {
+    display: block;
+    transform: translateX(200%);
+  }
+
+  .carousel-inner:has(.carousel-item.active.carousel-item-start:last-child) .carousel-item:first-child {
+    display: block;
+    transform: translateX(0);
+  }
+
+  .carousel-inner:has(.carousel-item.active.carousel-item-start:last-child) .carousel-item:first-child + .carousel-item {
+    display: block;
+    transform: translateX(100%);
+  }
+
+  .carousel-inner:has(.carousel-item.active.carousel-item-start:last-child) .carousel-item:first-child + .carousel-item + .carousel-item {
+    display: block;
+    transform: translateX(200%);
+  }
+
+  .carousel-inner:has(.carousel-item.active.carousel-item-start:nth-last-child(2)) .carousel-item:first-child {
+    display: block;
+    transform: translateX(100%);
+  }
+
+  .carousel-inner:has(.carousel-item.active.carousel-item-start:nth-last-child(2)) .carousel-item:first-child + .carousel-item {
+    display: block;
+    transform: translateX(200%);
+  }
+
+  .carousel-inner:has(.carousel-item.active.carousel-item-start:nth-last-child(3)) .carousel-item:first-child {
+    display: block;
+    transform: translateX(200%);
+  }
+
+  /** PREV BUTTON **/
+  .carousel-item:has(+ .carousel-item.active.carousel-item-end) {
+    display: block;
+    transform: translateX(0);
+  }
+
+  .carousel-inner:has(.carousel-item.active.carousel-item-end:first-child) .carousel-item:last-child {
+    display: block;
+    transform: translateX(0);
+  }
+
+  .carousel-item.active.carousel-item-end {
+    display: block;
+    transform: translateX(100%);
+  }
+
+  .carousel-inner:has(.carousel-item.active.carousel-item-end:last-child) .carousel-item:first-child {
+    display: block;
+    transform: translateX(200%);
+  }  
+
+  .carousel-inner:has(.carousel-item.active.carousel-item-end:last-child) .carousel-item:first-child + .carousel-item {
+    display: block;
+    transform: translateX(300%);
+  }  
+
+  .carousel-inner:has(.carousel-item.active.carousel-item-end:last-child) .carousel-item:first-child + .carousel-item + .carousel-item {
+    display: none;
+  }  
+
+ .carousel-inner:has(.carousel-item.active.carousel-item-end:nth-last-child(2)) .carousel-item:first-child {
+    display: block;
+    transform: translateX(300%);
+  }  
+
+  .carousel-item.active.carousel-item-end + .carousel-item {
+    display: block;
+    transform: translateX(200%);
+  }
+  
+  .carousel-item.active.carousel-item-end + .carousel-item + .carousel-item {
+    display: block;
+    transform: translateX(300%);
+  }
+  
+  .carousel-item.active.carousel-item-end + .carousel-item + .carousel-item + .carousel-item {
+    display: none;
+  }
+  
 }

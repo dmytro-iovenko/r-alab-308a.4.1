@@ -73,7 +73,7 @@ document.addEventListener("DOMContentLoaded", () => {
 });
 
 // Helper function to fetch breed images from Cat API and updates the carousel with them.
-async function loadImagesToCarousel(id, API_KEY) {
+async function loadImagesToCarousel(id) {
   // Fetch images for selected breed ID using Cat API
   const data = await fetch(`${API_URL}/images/search?limit=10&breed_ids=${id}`);
   const images = await data.json();
@@ -88,6 +88,7 @@ async function loadImagesToCarousel(id, API_KEY) {
       .getElementById("carouselItemTemplate")
       .content.firstElementChild.cloneNode(true);
     // Activate the first element
+    console.log(image, index)
     if (index === 0) {
       carouselItem.classList.add("active");
     }
