@@ -70,6 +70,28 @@ document.addEventListener("DOMContentLoaded", () => {
       `${API_URL}/images/search?limit=10&breed_ids=${id}`
     );
     const images = await data.json();
+
+    // Get carousel element by ID
+    const carousel = document.getElementById("carouselInner");
+    // Clear content
+    carousel.textContent = "";
+
+    // For each image in the response array, create a new element for the carousel
+    images.forEach((image, index) => {
+      // Create carousel item using HTML template
+      const carouselItem = document
+        .getElementById("carouselItemTemplate")
+        .content.firstElementChild.cloneNode(true);
+      // Activate the first element
+      if (index === 0) {
+        carouselItem.classList.add("active");
+      }
+      // Update the element's image with the URL from the API response.
+      const carouselItemImage = carouselItem.querySelector("img");
+      carouselItemImage.src = image.url;
+      // Append each of these new elements to the carousel
+      carousel.appendChild(carouselItem);
+    });
   });
 });
 
