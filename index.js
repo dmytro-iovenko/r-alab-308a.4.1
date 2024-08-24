@@ -1,17 +1,23 @@
 import * as Carousel from "./Carousel.js";
 import axios from "axios";
 
-// The breed selection input element.
-const breedSelect = document.getElementById("breedSelect");
-// The information section div element.
-const infoDump = document.getElementById("infoDump");
-// The progress bar div element.
-const progressBar = document.getElementById("progressBar");
-// The get favourites button element.
-const getFavouritesBtn = document.getElementById("getFavouritesBtn");
+// Use DOMContentLoaded event to run JavaScript code as soon as the page's HTML has been loaded
+document.addEventListener("DOMContentLoaded", function () {
+  // The breed selection input element.
+  const breedSelect = document.getElementById("breedSelect");
+  // The information section div element.
+  const infoDump = document.getElementById("infoDump");
+  // The progress bar div element.
+  const progressBar = document.getElementById("progressBar");
+  // The get favourites button element.
+  const getFavouritesBtn = document.getElementById("getFavouritesBtn");
 
-// Step 0: Store your API key here for reference and easy access.
-const API_KEY = process.env.API_KEY; // use environment variable defined in .env file
+  // Step 0: Store your API key here for reference and easy access.
+  const API_KEY = process.env.API_KEY; // use environment variable defined in .env file
+
+  // Do initial load of breeds immediately
+  initialLoad({ API_KEY });
+});
 
 /**
  * 1. Create an async function "initialLoad" that does the following:
@@ -22,6 +28,8 @@ const API_KEY = process.env.API_KEY; // use environment variable defined in .env
  * This function should execute immediately.
  */
 async function initialLoad(params) {
+  // Use destructuring assignment to get API_KEY from params
+  const { API_KEY } = params;
   // Retrieve a list of breeds from the cat API using fetch()
   const data = await fetch(`https://api.thecatapi.com/v1/breeds`, {
     headers: { "x-api-key": API_KEY },
@@ -45,9 +53,6 @@ async function initialLoad(params) {
     return option;
   }
 }
-
-// Do initial load of breeds
-initialLoad();
 
 /**
  * 2. Create an event handler for breedSelect that does the following:
