@@ -27,9 +27,26 @@ async function initialLoad(params) {
     headers: { "x-api-key": API_KEY },
   });
   const breeds = await data.json();
+
   // Create new <options> for each of these breeds, and append them to breedSelect.
+  breeds.forEach((breed) => {
+    breedSelect.appendChild(createOption(breed.id, breed.name));
+  });
+
+  // Helper function to create new <options> element
+  function createOption(id, name) {
+    // Create new <options>
+    const option = document.createElement("option");
+    // option should have a value attribute equal to the id of the breed
+    option.value = id;
+    // option should display text equal to the name of the breed
+    option.textContent = name;
+    // return new <options> element
+    return option;
+  }
 }
 
+// Do initial load of breeds
 initialLoad();
 
 /**
