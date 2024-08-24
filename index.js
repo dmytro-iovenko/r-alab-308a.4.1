@@ -1,6 +1,10 @@
 import * as Carousel from "./Carousel.js";
 import axios from "axios";
 
+// Step 0: Store API key and API url for reference and easy access.
+const API_KEY = process.env.API_KEY; // use environment variable defined in .env file
+const API_URL = "https://api.thecatapi.com/v1";
+
 // Use DOMContentLoaded event to run JavaScript code as soon as the page's HTML has been loaded
 document.addEventListener("DOMContentLoaded", () => {
   // The breed selection input element.
@@ -12,11 +16,6 @@ document.addEventListener("DOMContentLoaded", () => {
   // The get favourites button element.
   const getFavouritesBtn = document.getElementById("getFavouritesBtn");
 
-  // Step 0: Store your API key here for reference and easy access.
-  const API_KEY = process.env.API_KEY; // use environment variable defined in .env file
-
-  const API_URL = "https://api.thecatapi.com/v1";
-
   /**
    * 1. Create an async function "initialLoad" that does the following:
    * - Retrieve a list of breeds from the cat API using fetch().
@@ -25,7 +24,7 @@ document.addEventListener("DOMContentLoaded", () => {
    *  - Each option should display text equal to the name of the breed.
    * This function should execute immediately.
    */
-  async function initialLoad() {
+  (async function initialLoad() {
     // Retrieve a list of breeds from the cat API using fetch()
     const data = await fetch(`${API_URL}/breeds`);
     const breeds = await data.json();
@@ -34,6 +33,9 @@ document.addEventListener("DOMContentLoaded", () => {
     breeds.forEach((breed) => {
       breedSelect.appendChild(createOption(breed.id, breed.name));
     });
+
+    // Initial load breed images to carousel
+    loadImagesToCarousel(breedSelect.value);
 
     // Helper function to create new <options> element
     function createOption(id, name) {
@@ -46,7 +48,7 @@ document.addEventListener("DOMContentLoaded", () => {
       // return new <options> element
       return option;
     }
-  }
+  })();
 
   /**
    * 2. Create an event handler for breedSelect that does the following:
@@ -65,35 +67,37 @@ document.addEventListener("DOMContentLoaded", () => {
   breedSelect.addEventListener("change", async (event) => {
     // Get id from <select> element value
     const id = event.target.value;
-    // Fetch images for selected breed ID using Cat API
-    const data = await fetch(
-      `${API_URL}/images/search?limit=10&breed_ids=${id}`
-    );
-    const images = await data.json();
-
-    // Get carousel element by ID
-    const carousel = document.getElementById("carouselInner");
-    // Clear content
-    carousel.textContent = "";
-
-    // For each image in the response array, create a new element for the carousel
-    images.forEach((image, index) => {
-      // Create carousel item using HTML template
-      const carouselItem = document
-        .getElementById("carouselItemTemplate")
-        .content.firstElementChild.cloneNode(true);
-      // Activate the first element
-      if (index === 0) {
-        carouselItem.classList.add("active");
-      }
-      // Update the element's image with the URL from the API response.
-      const carouselItemImage = carouselItem.querySelector("img");
-      carouselItemImage.src = image.url;
-      // Append each of these new elements to the carousel
-      carousel.appendChild(carouselItem);
-    });
+    // Load breed images to carousel
+    loadImagesToCarousel(id);
   });
 });
+
+// Helper function to fetch breed images from Cat API and updates the carousel with them.
+async function loadImagesToCarousel(id, API_KEY) {
+  // Fetch images for selected breed ID using Cat API
+  const data = await fetch(`${API_URL}/images/search?limit=10&breed_ids=${id}`);
+  const images = await data.json();
+  // Get carousel element by ID
+  const carousel = document.getElementById("carouselInner");
+  // Clear carousel before populate new items
+  carousel.textContent = "";
+  // For each image in the response array, create a new element and append it to the carousel
+  images.forEach((image, index) => {
+    // Create carousel item using HTML template
+    const carouselItem = document
+      .getElementById("carouselItemTemplate")
+      .content.firstElementChild.cloneNode(true);
+    // Activate the first element
+    if (index === 0) {
+      carouselItem.classList.add("active");
+    }
+    // Update the element's image with the URL from the API response.
+    const carouselItemImage = carouselItem.querySelector("img");
+    carouselItemImage.src = image.url;
+    // Append each of these new elements to the carousel
+    carousel.appendChild(carouselItem);
+  });
+}
 
 /**
  * 3. Fork your own sandbox, creating a new one named "JavaScript Axios Lab."
