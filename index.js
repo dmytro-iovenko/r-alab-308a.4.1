@@ -21,6 +21,16 @@ const API_KEY = process.env.API_KEY; // use environment variable defined in .env
  *  - Each option should display text equal to the name of the breed.
  * This function should execute immediately.
  */
+async function initialLoad(params) {
+  // Retrieve a list of breeds from the cat API using fetch()
+  const data = await fetch(`https://api.thecatapi.com/v1/breeds`, {
+    headers: { "x-api-key": API_KEY },
+  });
+  const breeds = await data.json();
+  // Create new <options> for each of these breeds, and append them to breedSelect.
+}
+
+initialLoad();
 
 /**
  * 2. Create an event handler for breedSelect that does the following:
