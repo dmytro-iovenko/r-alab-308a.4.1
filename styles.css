@@ -295,9 +295,7 @@ body {
   }
 
   /** Hide navigation buttons when the carousel has 3 or fewer items **/
-  .carousel:has(.carousel-item:first-child:last-child) > button,
-  .carousel:has(.carousel-item:first-child + .carousel-item:last-child) > button,
-  .carousel:has(.carousel-item:first-child + .carousel-item + .carousel-item:last-child) > button {
+  .carousel:not(:has(.carousel-item:nth-child(4))) > button {
     display: none;
   }
 }
