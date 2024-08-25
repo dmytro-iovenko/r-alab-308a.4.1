@@ -111,7 +111,7 @@ body {
 
   /** **/
 
-  .carousel-inner:has(.carousel-item.active:last-child:not(.carousel-item-start):not(.carousel-item-end)) .carousel-item:first-child {
+  .carousel-inner:has(.carousel-item.active:last-child:not(.carousel-item-start):not(.carousel-item-end)) .carousel-item:first-child:not(:has(+ .carousel-item:last-child)) {
     display: block;
     transform: translateX(100%);
   }
@@ -173,7 +173,7 @@ body {
     transform: translateX(0);
   }
 
-  .carousel-inner:has(.carousel-item.active.carousel-item-start:last-child) .carousel-item:first-child + .carousel-item {
+  .carousel-inner:has(.carousel-item.active.carousel-item-start:last-child) .carousel-item:first-child + .carousel-item:not(:last-child) {
     display: block;
     transform: translateX(100%);
   }
@@ -193,10 +193,10 @@ body {
     transform: translateX(200%);
   }
 
-  .carousel-inner:has(.carousel-item.active.carousel-item-start:nth-last-child(2)) .carousel-item:first-child + .carousel-item:last-child {
+  /* .carousel-inner:has(.carousel-item.active.carousel-item-start:nth-last-child(2)) .carousel-item:first-child + .carousel-item:last-child {
     display: block;
     transform: translateX(0);
-  }
+  } */
 
   .carousel-inner:has(.carousel-item.active.carousel-item-start:nth-last-child(3)) .carousel-item:first-child {
     display: block;
@@ -233,7 +233,7 @@ body {
     display: none;
   }  
 
-  .carousel-inner:has(.carousel-item.active.carousel-item-end:nth-last-child(2)) .carousel-item:first-child {
+  .carousel-inner:has(.carousel-item.active.carousel-item-end:nth-last-child(2)) .carousel-item:first-child:not(:has(+ .carousel-item:last-child)) {
     display: block;
     transform: translateX(300%);
   }  
@@ -260,7 +260,17 @@ body {
     display: none;
   }
   /** PREV BUTTON : 2 IMAGES **/  
-  .carousel-inner:has(.carousel-item.active.carousel-item-end:first-child + .carousel-item:last-child) .carousel-item:first-child {
+  /* .carousel-inner:has(.carousel-item.active.carousel-item-end:first-child + .carousel-item:last-child) .carousel-item:first-child {
+    display: block;
+    transform: translateX(100%);
+  } */
+
+  /** Disable images rotation when there are only 2 images in carousel **/
+  .carousel-inner:has(.carousel-item:first-child + .carousel-item:last-child) .carousel-item:first-child {
+    display: block;
+    transform: translateX(0);
+  }
+  .carousel-inner:has(.carousel-item:first-child + .carousel-item:last-child) .carousel-item:last-child {
     display: block;
     transform: translateX(100%);
   }
