@@ -294,4 +294,10 @@ body {
     transform: translateX(200%);
   }
 
+  /** Hide navigation buttons when the carousel has 3 or fewer items **/
+  .carousel:has(.carousel-item:first-child:last-child) > button,
+  .carousel:has(.carousel-item:first-child + .carousel-item:last-child) > button,
+  .carousel:has(.carousel-item:first-child + .carousel-item + .carousel-item:last-child) > button {
+    display: none;
+  }
 }
