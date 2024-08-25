@@ -69,16 +69,23 @@ body {
 }
 
 @media (min-width: 768px) {
-
+  :root {
+    --num-images: 3;
+  }
   .carousel-item {
-    width: calc(100% / 3); /* number of items is 3 */
+    width: calc(100% / var(--num-images)); /* number of items is 3 */
   }
 
   /** IF ONLY 2 IMAGES **/
   .carousel-inner:has(.carousel-item:first-child + .carousel-item:last-child) .carousel-item {
-    margin-left: calc(100% / 6) /* center 2 images */
+    margin-left: calc(50% / var(--num-images)) /* center 2 images */
   }
 
+  /** IF ONLY 1 IMAGE **/
+  .carousel-inner:has(.carousel-item:first-child:last-child) .carousel-item {
+    margin-left: calc(100% / var(--num-images)) /* center 1 image */
+  }
+  
   .carousel-item.active {
     display: block;
   }
