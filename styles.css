@@ -61,11 +61,8 @@ body {
 }
 .card img {
   max-height: 100%;
-}
-@media (max-width: 767px) {
-  .card .img-wrapper {
-    height: 17em;
-  }
+  height: calc(70vw);
+  object-fit: cover;
 }
 
 @media (min-width: 768px) {
@@ -74,6 +71,10 @@ body {
   }
   .carousel-item {
     width: calc(100% / var(--num-images)); /* number of items is 3 */
+  }
+
+  .card img {
+    height: calc(100vw / var(--num-images));
   }
 
   /** IF ONLY 2 IMAGES **/
