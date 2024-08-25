@@ -83,7 +83,7 @@ body {
     transform: translateX(-100%);
   }
 
-  .carousel-inner:has(.carousel-item.active:first-child) .carousel-item:last-child {
+  .carousel-item.active:first-child + .carousel-item + .carousel-item + .carousel-item:last-child {
     display: block;
     transform: translateX(-100%);
   }
@@ -110,7 +110,7 @@ body {
     transform: translateX(100%);
   }
 
-  .carousel-inner:has(.carousel-item.active:last-child) .carousel-item:first-child + .carousel-item {
+  .carousel-inner:has(.carousel-item.active:last-child:not(.carousel-item-start):not(.carousel-item-end)) .carousel-item:first-child + .carousel-item:not(.active):not(:last-child) {
     display: block;
     transform: translateX(200%);
   }
@@ -120,12 +120,12 @@ body {
     transform: translateX(300%);
   }
 
-  .carousel-inner:has(.carousel-item.active:nth-last-child(2)) .carousel-item:first-child {
+  .carousel-inner:has(.carousel-item.active + .carousel-item:not(.active):last-child) .carousel-item:first-child:not(.active) {
     display: block;
     transform: translateX(200%);
   }
 
-  .carousel-inner:has(.carousel-item.active:nth-last-child(2)) .carousel-item:first-child + .carousel-item {
+  .carousel-inner:has(.carousel-item.active:nth-last-child(2)) .carousel-item:first-child + .carousel-item:not(.active):not(:last-child) {
     display: block;
     transform: translateX(300%);
   }
@@ -178,9 +178,14 @@ body {
     transform: translateX(100%);
   }
 
-  .carousel-inner:has(.carousel-item.active.carousel-item-start:nth-last-child(2)) .carousel-item:first-child + .carousel-item {
+  .carousel-inner:has(.carousel-item.active.carousel-item-start:nth-last-child(2)) .carousel-item:first-child + .carousel-item:not(:last-child) {
     display: block;
     transform: translateX(200%);
+  }
+
+  .carousel-inner:has(.carousel-item.active.carousel-item-start:nth-last-child(2)) .carousel-item:first-child + .carousel-item:last-child {
+    display: block;
+    transform: translateX(0);
   }
 
   .carousel-inner:has(.carousel-item.active.carousel-item-start:nth-last-child(3)) .carousel-item:first-child {
@@ -218,9 +223,17 @@ body {
     display: none;
   }  
 
- .carousel-inner:has(.carousel-item.active.carousel-item-end:nth-last-child(2)) .carousel-item:first-child {
+  .carousel-inner:has(.carousel-item.active.carousel-item-end:nth-last-child(2)) .carousel-item:first-child {
     display: block;
     transform: translateX(300%);
+  }  
+
+  .carousel-inner:has(.carousel-item.active.carousel-item-end:nth-last-child(2)) .carousel-item:first-child + .carousel-item:not(:last-child) {
+    display: none;
+  }  
+
+  .carousel-inner:has(.carousel-item.active.carousel-item-end:nth-last-child(3)) .carousel-item:first-child {
+    display: none;
   }  
 
   .carousel-item.active.carousel-item-end + .carousel-item {
@@ -236,5 +249,4 @@ body {
   .carousel-item.active.carousel-item-end + .carousel-item + .carousel-item + .carousel-item {
     display: none;
   }
-  
 }
