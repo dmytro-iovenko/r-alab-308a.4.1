@@ -132,7 +132,7 @@ body {
   }
 
   /* :has(.carousel-item:nth-child(5)) - only apply if more then 4 images in carousel */
-  .carousel-inner:has(.carousel-item:nth-child(5)):has(.carousel-item.active:last-child) .carousel-item:first-child + .carousel-item  + .carousel-item {
+  .carousel-inner:has(.carousel-item:nth-child(5)):has(.carousel-item.active:not(.carousel-item-start):not(.carousel-item-end):last-child) .carousel-item:first-child ~ .carousel-item:nth-child(3) {
     display: block;
     transform: translateX(300%);
   }
@@ -154,7 +154,7 @@ body {
 
   /* :not(.active) - to handle only 3 images in carousel */
   /* :has(.carousel-item:nth-child(5)) - only apply if more then 4 images in carousel */
-  .carousel-inner:has(.carousel-item:nth-child(5)):has(.carousel-item.active:nth-last-child(3)).carousel-item:first-child:not(.active) {
+  .carousel-inner:has(.carousel-item:nth-child(5)):has(.carousel-item.active:nth-last-child(3):not(.carousel-item-start):not(.carousel-item-end)) .carousel-item:first-child:not(.active) {
     display: block;
     transform: translateX(300%);
   }
@@ -194,7 +194,7 @@ body {
     transform: translateX(100%);
   }
 
-  .carousel-inner:has(.carousel-item.active.carousel-item-start:last-child) .carousel-item:first-child + .carousel-item + .carousel-item {
+  .carousel-inner:has(.carousel-item.active.carousel-item-start:last-child) .carousel-item:first-child ~ .carousel-item:nth-child(3) {
     display: block;
     transform: translateX(200%);
   }
