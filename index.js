@@ -77,6 +77,8 @@ async function loadImagesToCarousel(id) {
   // Fetch images for selected breed ID using Cat API
   const data = await fetch(`${API_URL}/images/search?limit=10&breed_ids=${id}`);
   const images = await data.json();
+  // If there are only 4 images, duplicate them to ensure smooth rotation on wide screen
+  (images.length === 4) && images.push(...images);
   // Get carousel element by ID
   const carousel = document.getElementById("carouselInner");
   // Clear carousel before populate new items

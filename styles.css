@@ -89,7 +89,7 @@ body {
   }
 
   /* ... + .carousel-item:not(:last-child) ~ .carousel-item:last-child - to handle 2 and 3 images carousels*/
-  .carousel-item.active:first-child + .carousel-item:not(:last-child) + .carousel-item:not(:last-child) + .carousel-item:last-child {
+  .carousel-item.active:first-child:not(.carousel-item-start) + .carousel-item:not(:last-child) + .carousel-item:not(:last-child) ~ .carousel-item:last-child:not(.carousel-item-end) {
     display: block;
     transform: translateX(-100%);
   }
