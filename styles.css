@@ -74,6 +74,11 @@ body {
     width: calc(100% / 3); /* number of items is 3 */
   }
 
+  /** IF ONLY 2 IMAGES **/
+  .carousel-inner:has(.carousel-item:first-child + .carousel-item:last-child) .carousel-item {
+    margin-left: calc(100% / 6) /* center 2 images */
+  }
+
   .carousel-item.active {
     display: block;
   }
@@ -83,7 +88,8 @@ body {
     transform: translateX(-100%);
   }
 
-  .carousel-item.active:first-child + .carousel-item + .carousel-item + .carousel-item:last-child {
+  /* ... + .carousel-item:not(:last-child) ~ .carousel-item:last-child - to handle 2 and 3 images carousels*/
+  .carousel-item.active:first-child + .carousel-item:not(:last-child) + .carousel-item:not(:last-child) + .carousel-item:last-child {
     display: block;
     transform: translateX(-100%);
   }
@@ -105,7 +111,7 @@ body {
 
   /** **/
 
-  .carousel-inner:has(.carousel-item.active:last-child) .carousel-item:first-child {
+  .carousel-inner:has(.carousel-item.active:last-child:not(.carousel-item-start):not(.carousel-item-end)) .carousel-item:first-child {
     display: block;
     transform: translateX(100%);
   }
@@ -120,17 +126,21 @@ body {
     transform: translateX(300%);
   }
 
-  .carousel-inner:has(.carousel-item.active + .carousel-item:not(.active):last-child) .carousel-item:first-child:not(.active) {
+  /* .carousel-inner:has(...) - to exclude 2 images carousel*/
+  .carousel-inner:has(.carousel-item.active:not(.carousel-item-start):not(.carousel-item-end) + .carousel-item:not(.active):last-child) .carousel-item:first-child:not(.active) {
     display: block;
     transform: translateX(200%);
   }
 
-  .carousel-inner:has(.carousel-item.active:nth-last-child(2)) .carousel-item:first-child + .carousel-item:not(.active):not(:last-child) {
+  /* .carousel-item:first-child + .carousel-item:not(:last-child) - to handle only 2 images carousel*/
+  /* .carousel-inner:has(.carousel-item.active:nth-last-child(2)) .carousel-item:first-child + .carousel-item:not(.active):not(:last-child) { */
+  .carousel-inner:has(.carousel-item.active:not(.carousel-item-start):not(.carousel-item-end) + .carousel-item:not(.active):last-child) .carousel-item:first-child + .carousel-item:not(.active):not(:last-child) {
     display: block;
     transform: translateX(300%);
   }
 
-  .carousel-inner:has(.carousel-item.active:nth-last-child(3)) .carousel-item:first-child {
+  /* :not(.active) - to handle only 3 images in carousel */
+  .carousel-inner:has(.carousel-item.active:nth-last-child(3)) .carousel-item:first-child:not(.active) {
     display: block;
     transform: translateX(300%);
   }
@@ -209,12 +219,12 @@ body {
     transform: translateX(100%);
   }
 
-  .carousel-inner:has(.carousel-item.active.carousel-item-end:last-child) .carousel-item:first-child {
+  .carousel-inner:has(.carousel-item.active.carousel-item-end:last-child) .carousel-item:first-child:not(.carousel-item-end) {
     display: block;
     transform: translateX(200%);
   }  
 
-  .carousel-inner:has(.carousel-item.active.carousel-item-end:last-child) .carousel-item:first-child + .carousel-item {
+  .carousel-inner:has(.carousel-item.active.carousel-item-end:last-child) .carousel-item:first-child + .carousel-item:not(:last-child) {
     display: block;
     transform: translateX(300%);
   }  
@@ -248,5 +258,10 @@ body {
   
   .carousel-item.active.carousel-item-end + .carousel-item + .carousel-item + .carousel-item {
     display: none;
+  }
+  /** PREV BUTTON : 2 IMAGES **/  
+  .carousel-inner:has(.carousel-item.active.carousel-item-end:first-child + .carousel-item:last-child) .carousel-item:first-child {
+    display: block;
+    transform: translateX(100%);
   }
 }
