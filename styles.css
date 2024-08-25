@@ -111,12 +111,14 @@ body {
 
   /** **/
 
-  .carousel-inner:has(.carousel-item.active:last-child:not(.carousel-item-start):not(.carousel-item-end)) .carousel-item:first-child:not(:has(+ .carousel-item:last-child)) {
+  /* .carousel-inner:has(.carousel-item.active:last-child:not(.carousel-item-start):not(.carousel-item-end)) .carousel-item:first-child:not(:has(+ .carousel-item:last-child)) { */
+  .carousel-inner:has(.carousel-item:not(:first-child) + .carousel-item + .carousel-item.active:last-child:not(.carousel-item-start):not(.carousel-item-end)) .carousel-item:first-child:not(:has(+ .carousel-item:last-child)) {
+    
     display: block;
     transform: translateX(100%);
   }
 
-  .carousel-inner:has(.carousel-item.active:last-child:not(.carousel-item-start):not(.carousel-item-end)) .carousel-item:first-child + .carousel-item:not(.active):not(:last-child) {
+  .carousel-inner:has(.carousel-item:not(:first-child) + .carousel-item + .carousel-item.active:last-child:not(.carousel-item-start):not(.carousel-item-end)) .carousel-item:first-child + .carousel-item:not(.active):not(:last-child) {
     display: block;
     transform: translateX(200%);
   }
@@ -127,7 +129,8 @@ body {
   }
 
   /* .carousel-inner:has(...) - to exclude 2 images carousel*/
-  .carousel-inner:has(.carousel-item.active:not(.carousel-item-start):not(.carousel-item-end) + .carousel-item:not(.active):last-child) .carousel-item:first-child:not(.active) {
+  /* .carousel-inner:has(.carousel-item.active:not(.carousel-item-start):not(.carousel-item-end) + .carousel-item:not(.active):last-child) .carousel-item:first-child:not(.active) { */
+  .carousel-inner:has(.carousel-item:not(:first-child) + .carousel-item.active:not(.carousel-item-start):not(.carousel-item-end) + .carousel-item:not(.active):last-child) .carousel-item:first-child:not(.active) {
     display: block;
     transform: translateX(200%);
   }
@@ -168,7 +171,9 @@ body {
     transform: translateX(200%);
   }
 
-  .carousel-inner:has(.carousel-item.active.carousel-item-start:last-child) .carousel-item:first-child {
+  
+  /* .carousel-inner:has(.carousel-item.active.carousel-item-start:last-child) .carousel-item:first-child { */
+  .carousel-inner:has(.carousel-item:not(:first-child) + .carousel-item + .carousel-item.active.carousel-item-start:last-child) .carousel-item:first-child {
     display: block;
     transform: translateX(0);
   }
@@ -183,7 +188,7 @@ body {
     transform: translateX(200%);
   }
 
-  .carousel-inner:has(.carousel-item.active.carousel-item-start:nth-last-child(2)) .carousel-item:first-child {
+  .carousel-inner:has(.carousel-item:not(:first-child) + .carousel-item.active.carousel-item-start:nth-last-child(2)) .carousel-item:first-child {
     display: block;
     transform: translateX(100%);
   }
@@ -198,7 +203,7 @@ body {
     transform: translateX(0);
   } */
 
-  .carousel-inner:has(.carousel-item.active.carousel-item-start:nth-last-child(3)) .carousel-item:first-child {
+  .carousel-inner:has(.carousel-item.active.carousel-item-start:nth-last-child(3):not(:first-child)) .carousel-item:first-child {
     display: block;
     transform: translateX(200%);
   }
@@ -229,11 +234,11 @@ body {
     transform: translateX(300%);
   }  
 
-  .carousel-inner:has(.carousel-item.active.carousel-item-end:last-child) .carousel-item:first-child + .carousel-item + .carousel-item {
+  .carousel-inner:has(.carousel-item.active.carousel-item-end:last-child) .carousel-item:first-child + .carousel-item + .carousel-item:not(:last-child) {
     display: none;
   }  
 
-  .carousel-inner:has(.carousel-item.active.carousel-item-end:nth-last-child(2)) .carousel-item:first-child:not(:has(+ .carousel-item:last-child)) {
+  .carousel-inner:has(.carousel-item:not(:first-child) + .carousel-item.active.carousel-item-end:nth-last-child(2)) .carousel-item:first-child:not(:has(+ .carousel-item:last-child)) {
     display: block;
     transform: translateX(300%);
   }  
@@ -274,4 +279,19 @@ body {
     display: block;
     transform: translateX(100%);
   }
+
+  /** Disable images rotation when there are only 3 images in carousel **/
+  .carousel-inner:has(.carousel-item:first-child + .carousel-item + .carousel-item:last-child) .carousel-item:first-child {
+    display: block;
+    transform: translateX(0);
+  }
+  .carousel-inner:has(.carousel-item:first-child + .carousel-item + .carousel-item:last-child) .carousel-item:first-child + .carousel-item {
+    display: block;
+    transform: translateX(100%);
+  }
+  .carousel-inner:has(.carousel-item:first-child + .carousel-item + .carousel-item:last-child) .carousel-item:last-child {
+    display: block;
+    transform: translateX(200%);
+  }
+
 }
