@@ -341,7 +341,6 @@ body {
 }
 
 /*** infoDump ***/
-
 #infoDump > div {
   background: #fff;
   padding: 1em;
@@ -364,4 +363,21 @@ body {
 #infoDump .section p {
   margin: 0;
   padding: 0;
+}
+/* Attributes */
+#infoDump .attributes {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5em;
+}
+#infoDump .attributes .attribute {
+  flex: 1;
+  min-width: 100%;
+  background: #e0e0e0;
+  padding: 10px;
+  border-radius: 4px;
+}
+#infoDump .attributes .attribute h3 {
+  margin-top: 0;
+  text-transform: capitalize;
 }
