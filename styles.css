@@ -100,6 +100,7 @@ body {
   .carousel-item.active:first-child:not(.carousel-item-start) ~ .carousel-item:nth-child(3) ~ .carousel-item:last-child:not(.carousel-item-end) {
     display: block;
     transform: translateX(-100%);
+    transition: all 1ms;
   }
 
   .carousel-item.active + .carousel-item {
@@ -245,20 +246,20 @@ body {
     transform: translateX(300%);
   }  
 
-  .carousel-inner:has(.carousel-item.active.carousel-item-end:last-child) .carousel-item:first-child + .carousel-item + .carousel-item:not(:last-child) {
-    display: none;
-  }  
-
   .carousel-inner:has(.carousel-item:not(:first-child) + .carousel-item.active.carousel-item-end:nth-last-child(2)) .carousel-item:first-child:not(:has(+ .carousel-item:last-child)) {
     display: block;
     transform: translateX(300%);
   }  
 
-  .carousel-inner:has(.carousel-item.active.carousel-item-end:nth-last-child(2)) .carousel-item:first-child + .carousel-item:not(:last-child) {
+  .carousel-inner:has(.carousel-item:nth-child(5)):has(.carousel-item.active.carousel-item-end:last-child) .carousel-item:first-child + .carousel-item + .carousel-item:not(:last-child) {
     display: none;
   }  
 
-  .carousel-inner:has(.carousel-item.active.carousel-item-end:nth-last-child(3)) .carousel-item:first-child {
+  .carousel-inner:has(.carousel-item:nth-child(5)):has(.carousel-item.active.carousel-item-end:nth-last-child(2)) .carousel-item:first-child + .carousel-item:not(:last-child) {
+    display: none;
+  }  
+
+  .carousel-inner:has(.carousel-item:nth-child(5)):has(.carousel-item.active.carousel-item-end:nth-last-child(3)) .carousel-item:first-child {
     display: none;
   }  
 
@@ -281,6 +282,15 @@ body {
     transform: translateX(100%);
   } */
 
+  /** 4 images in carousel **/
+  /* .carousel-inner:has(.carousel-item:nth-child(4)):not(:has(.carousel-item:nth-child(5))) .carousel-item:has(+ .carousel-item.active) { */
+  /* .carousel:not(:has(.carousel-control-next:active)) .carousel-inner:not(:has(.carousel-item-start)) .carousel-item:has(+ .carousel-item.active) { */
+  .carousel:not(:has(.carousel-control-next:active)) .carousel-inner:has(.carousel-item:nth-child(4)):not(:has(.carousel-item:nth-child(5))):not(:has(.carousel-item-start)) .carousel-item:has(+ .carousel-item.active) {
+    /* border: 2px solid blue; */
+    /* visibility: hidden; */
+    /* transform: translateX(300%); */
+  }
+  
   /** NEXT BUTTON: 4 images in carousel **/
   /* if next button click & first image is active - instantly move last image to the end) */
   .carousel:has(.carousel-control-next:active) .carousel-item.active:not(.carousel-item-start):first-child ~ .carousel-item:nth-child(4):last-child {
@@ -328,4 +338,30 @@ body {
   .carousel:not(:has(.carousel-item:nth-child(4))) > button {
     display: none;
   }
+}
+
+/*** infoDump ***/
+
+#infoDump > div {
+  background: #fff;
+  padding: 1em;
+  margin: 1em;
+  border-radius: 8px;
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+}
+#infoDump h1 {
+  color: #333;
+}
+#infoDump .section {
+  margin-bottom: 20px;
+}
+#infoDump .section h2 {
+  border-bottom: 2px solid #333;
+  padding-bottom: 10px;
+  margin-bottom: 10px;
+  color: #555;
+}
+#infoDump .section p {
+  margin: 0;
+  padding: 0;
 }

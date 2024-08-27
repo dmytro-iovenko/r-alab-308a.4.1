@@ -75,10 +75,19 @@ document.addEventListener("DOMContentLoaded", () => {
 // Helper function to fetch breed images from Cat API and updates the carousel with them.
 async function loadImagesToCarousel(id) {
   // Fetch images for selected breed ID using Cat API
-  const data = await fetch(`${API_URL}/images/search?limit=10&breed_ids=${id}`);
-  const images = await data.json();
+  const imagesPromise = fetch(
+    `${API_URL}/images/search?limit=20&breed_ids=${id}`
+  );
+  // Fetch detailed info for selected breed ID using Cat API
+  const infoPromise = fetch(`${API_URL}/breeds/${id}`);
+  // Get images data and info data simultaneously
+  [imagesData, infoData] = await Promise.all([imagesPromise, infoPromise]);
+  // Parse the JSON response from the info data into info object
+  const info = await infoData.json();
+  // Parse the JSON response from the images data into images array
+  const images = await imagesData.json();
   // If there are only 4 images, duplicate them to ensure smooth rotation on wide screen
-  (images.length === 4) && images.push(...images);
+  images.length === 4 && images.push(...images);
   // Get carousel element by ID
   const carousel = document.getElementById("carouselInner");
   // Clear carousel before populate new items
@@ -90,7 +99,6 @@ async function loadImagesToCarousel(id) {
       .getElementById("carouselItemTemplate")
       .content.firstElementChild.cloneNode(true);
     // Activate the first element
-    console.log(image, index)
     if (index === 0) {
       carouselItem.classList.add("active");
     }
@@ -100,6 +108,23 @@ async function loadImagesToCarousel(id) {
     // Append each of these new elements to the carousel
     carousel.appendChild(carouselItem);
   });
+  // Clean infoDump
+  infoDump.textContent = "";
+  // Create infoDump item using HTML template
+  const infoDumpItem = document
+    .getElementById("infoDumpTemplate")
+    .content.firstElementChild.cloneNode(true);
+
+  // Update <h1> element with title
+  const infoDumpTitle = infoDumpItem.querySelector("h1");
+  infoDumpTitle.textContent = info.name;
+  // Add alternative names, if any
+  (info.alt_names) && (infoDumpTitle.textContent += " (" + info.alt_names + ")");
+  // Update <p> element with breed description
+  const infoDumpDescription = infoDumpItem.querySelector(".section:first-of-type > h2 + p");
+  infoDumpDescription.textContent = info.description
+  // Render infoDump content
+  infoDump.appendChild(infoDumpItem);
 }
 
 /**
