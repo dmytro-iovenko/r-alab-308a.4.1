@@ -90,7 +90,8 @@ document.addEventListener("DOMContentLoaded", () => {
 async function loadImagesToCarousel(id) {
   // Fetch images for selected breed ID using Cat API
   const imagesPromise = fetch(
-    `${API_URL}/images/search?limit=20&breed_ids=${id}`
+    `${API_URL}/images/search?limit=100&breed_ids=${id}`,
+    { headers: { "x-api-key": API_KEY } }
   );
   // Fetch detailed info for selected breed ID using Cat API
   const infoPromise = fetch(`${API_URL}/breeds/${id}`);
