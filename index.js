@@ -150,6 +150,35 @@ async function loadImagesToCarousel(id) {
   attrs.map((attr) =>
     infoDumpAttributes.appendChild(createAttr(attrTemplate, attr, info))
   );
+  // Add additional information (links)
+  const infoDumpAdditionalInfo = infoDumpItem.querySelector(
+    ".section:last-of-type > h2 + p"
+  );
+  const resources = [];
+  // if 'vetstreet_url' exists, create VetStreet Page link
+  info.vetstreet_url &&
+    resources.push(
+      createResourceLink(info.vetstreet_url, `VetStreet ${info.name} page`)
+        .outerHTML
+    );
+  // if 'wikipedia_url' exists, create Wikipedia article link
+  info.wikipedia_url &&
+    resources.push(
+      createResourceLink(info.wikipedia_url, `Wikipedia article`).outerHTML
+    );
+  // Update <p> element with breed description
+  resources.length &&
+    (infoDumpAdditionalInfo.innerHTML =
+      "For more details, visit " + resources.join(" or ") + ".");
+
+  // Function to create a resource link
+  function createResourceLink(url, name) {
+    const a = document.createElement("a");
+    a.href = url;
+    a.target = "_blank";
+    a.textContent = name;
+    return a;
+  }
 
   // Function to create attribute element and fill out data
   function createAttr(template, prop, data) {
@@ -157,7 +186,7 @@ async function loadImagesToCarousel(id) {
     attr.querySelector("h3").textContent = prop.split("_").join(" ");
     switch (prop) {
       case "weight":
-        console.log(data[prop])
+        console.log(data[prop]);
         attr.querySelector("p").textContent =
           data[prop].imperial + " lbs (" + data[prop].metric + " kg)";
         break;
