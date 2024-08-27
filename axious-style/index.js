@@ -251,6 +251,8 @@ axios.interceptors.request.use(
     // set the width of the progressBar element to 0%
     // to reset the progress with each request
     progressBar.style.width = "0";
+    // set the body element's cursor style to "progress."
+    document.body.style.cursor = "progress";
     return config;
   },
   (error) => {
@@ -265,6 +267,8 @@ axios.interceptors.response.use(
     elapsedTime.end = Date.now();
     elapsedTime.total = elapsedTime.end - elapsedTime.start;
     console.log(`The request took ${elapsedTime.total} ms.`);
+    // remove the progress cursor style from the body element
+    document.body.style.cursor = "none";
     return response;
   },
   (error) => {
