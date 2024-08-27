@@ -19,90 +19,94 @@ const attrs = [
   "dog_friendly",
 ];
 
-// Use DOMContentLoaded event to run JavaScript code as soon as the page's HTML has been loaded
-document.addEventListener("DOMContentLoaded", () => {
-  // The breed selection input element.
-  const breedSelect = document.getElementById("breedSelect");
-  // The information section div element.
-  const infoDump = document.getElementById("infoDump");
-  // The progress bar div element.
-  const progressBar = document.getElementById("progressBar");
-  // The get favourites button element.
-  const getFavouritesBtn = document.getElementById("getFavouritesBtn");
+// The breed selection input element.
+const breedSelect = document.getElementById("breedSelect");
+// The information section div element.
+const infoDump = document.getElementById("infoDump");
+// The progress bar div element.
+const progressBar = document.getElementById("progressBar");
+// The get favourites button element.
+const getFavouritesBtn = document.getElementById("getFavouritesBtn");
 
-  /**
-   * 1. Create an async function "initialLoad" that does the following:
-   * - Retrieve a list of breeds from the cat API using fetch().
-   * - Create new <options> for each of these breeds, and append them to breedSelect.
-   *  - Each option should have a value attribute equal to the id of the breed.
-   *  - Each option should display text equal to the name of the breed.
-   * This function should execute immediately.
-   */
-  (async function initialLoad() {
-    try {
-      // Retrieve a list of breeds from the cat API using fetch()
-      const response = await axios(`breeds`);
-      const breeds = await response.data;
+/**
+ * 1. Create an async function "initialLoad" that does the following:
+ * - Retrieve a list of breeds from the cat API using fetch().
+ * - Create new <options> for each of these breeds, and append them to breedSelect.
+ *  - Each option should have a value attribute equal to the id of the breed.
+ *  - Each option should display text equal to the name of the breed.
+ * This function should execute immediately.
+ */
+(async function initialLoad() {
+  try {
+    // Retrieve a list of breeds from the cat API using fetch()
+    const response = await axios(`breeds`);
+    const breeds = await response.data;
 
-      // Clear breedSelect before populate new items
-      breedSelect.textContent = "";
+    // Clear breedSelect before populate new items
+    breedSelect.textContent = "";
 
-      // Create new <options> for each of these breeds, and append them to breedSelect.
-      breeds.forEach((breed) => {
-        breedSelect.appendChild(createOption(breed.id, breed.name));
-      });
+    // Create new <options> for each of these breeds, and append them to breedSelect.
+    breeds.forEach((breed) => {
+      breedSelect.appendChild(createOption(breed.id, breed.name));
+    });
 
-      // Initial load breed images to carousel
-      loadImagesToCarousel(breedSelect.value);
-    } catch (error) {
-      console.log(error);
-    }
+    // Initial load breed images to carousel
+    loadImagesToCarousel(breedSelect.value);
+  } catch (error) {
+    console.log(error);
+  }
 
-    // Helper function to create new <options> element
-    function createOption(id, name) {
-      // Create new <options>
-      const option = document.createElement("option");
-      // option should have a value attribute equal to the id of the breed
-      option.value = id;
-      // option should display text equal to the name of the breed
-      option.textContent = name;
-      // return new <options> element
-      return option;
-    }
-  })();
+  // Helper function to create new <options> element
+  function createOption(id, name) {
+    // Create new <options>
+    const option = document.createElement("option");
+    // option should have a value attribute equal to the id of the breed
+    option.value = id;
+    // option should display text equal to the name of the breed
+    option.textContent = name;
+    // return new <options> element
+    return option;
+  }
+})();
 
-  /**
-   * 2. Create an event handler for breedSelect that does the following:
-   * - Retrieve information on the selected breed from the cat API using fetch().
-   *  - Make sure your request is receiving multiple array items!
-   *  - Check the API documentation if you're only getting a single object.
-   * - For each object in the response array, create a new element for the carousel.
-   *  - Append each of these new elements to the carousel.
-   * - Use the other data you have been given to create an informational section within the infoDump element.
-   *  - Be creative with how you create DOM elements and HTML.
-   *  - Feel free to edit index.html and styles.css to suit your needs, but be careful!
-   *  - Remember that functionality comes first, but user experience and design are important.
-   * - Each new selection should clear, re-populate, and restart the Carousel.
-   * - Add a call to this function to the end of your initialLoad function above to create the initial carousel.
-   */
-  breedSelect.addEventListener("change", async (event) => {
-    try {
-      // Get id from <select> element value
-      const id = event.target.value;
-      // Load breed images to carousel
-      loadImagesToCarousel(id);
-    } catch (error) {
-      console.log(error);
-    }
-  });
+/**
+ * 2. Create an event handler for breedSelect that does the following:
+ * - Retrieve information on the selected breed from the cat API using fetch().
+ *  - Make sure your request is receiving multiple array items!
+ *  - Check the API documentation if you're only getting a single object.
+ * - For each object in the response array, create a new element for the carousel.
+ *  - Append each of these new elements to the carousel.
+ * - Use the other data you have been given to create an informational section within the infoDump element.
+ *  - Be creative with how you create DOM elements and HTML.
+ *  - Feel free to edit index.html and styles.css to suit your needs, but be careful!
+ *  - Remember that functionality comes first, but user experience and design are important.
+ * - Each new selection should clear, re-populate, and restart the Carousel.
+ * - Add a call to this function to the end of your initialLoad function above to create the initial carousel.
+ */
+breedSelect.addEventListener("change", async (event) => {
+  try {
+    // Get id from <select> element value
+    const id = event.target.value;
+    // Load breed images to carousel
+    loadImagesToCarousel(id);
+  } catch (error) {
+    console.log(error);
+  }
 });
 
 // Helper function to fetch breed images from Cat API and updates the carousel with them.
 async function loadImagesToCarousel(id) {
+  // Pass updateProgress function to the axios onDownloadProgress config option
+  const config = {
+    onDownloadProgress: updateProgress,
+  };
   // Fetch images for selected breed ID using Cat API
-  const imagesPromise = axios.get(`images/search?limit=100&breed_ids=${id}`);
+  const imagesPromise = axios.get(
+    `images/search?limit=100&breed_ids=${id}`,
+    config
+  );
   // Fetch detailed info for selected breed ID using Cat API
-  const infoPromise = axios.get(`breeds/${id}`);
+  const infoPromise = axios.get(`breeds/${id}`, config);
   // Get images data and info data simultaneously
   [imagesData, infoData] = await Promise.all([imagesPromise, infoPromise]);
   console.log(imagesData, infoData);
@@ -244,6 +248,9 @@ axios.interceptors.request.use(
     config.metadata = { ...config.metadata, elapsedTime: {} };
     config.metadata.elapsedTime.start = Date.now();
     console.log("Axious request begins:", config);
+    // set the width of the progressBar element to 0%
+    // to reset the progress with each request
+    progressBar.style.width = "0";
     return config;
   },
   (error) => {
@@ -261,7 +268,7 @@ axios.interceptors.response.use(
     return response;
   },
   (error) => {
-    console.log("axios.interceptors.request:", "error", error);
+    console.log("Axious response failed:", error);
     return error;
   }
 );
@@ -280,6 +287,11 @@ axios.interceptors.response.use(
  *   once or twice per request to this API. This is still a concept worth familiarizing yourself
  *   with for future projects.
  */
+function updateProgress(progressEvent) {
+  console.log("ProgressEvent:", progressEvent);
+  progressEvent.progress &&
+    (progressBar.style.width = `${progressEvent.progress * 100}%`);
+}
 
 /**
  * 7. As a final element of progress indication, add the following to your axios interceptors:
