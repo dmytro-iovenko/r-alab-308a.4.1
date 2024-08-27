@@ -225,9 +225,6 @@ async function loadImagesToCarousel(id) {
 }
 
 /**
- * 3. Fork your own sandbox, creating a new one named "JavaScript Axios Lab."
- */
-/**
  * 4. Change all of your fetch() functions to axios!
  * - axios has already been imported for you within index.js.
  * - If you've done everything correctly up to this point, this should be simple.
@@ -242,7 +239,32 @@ async function loadImagesToCarousel(id) {
  * - Add a console.log statement to indicate when requests begin.
  * - As an added challenge, try to do this on your own without referencing the lesson material.
  */
+axios.interceptors.request.use(
+  (config) => {
+    config.metadata = { ...config.metadata, elapsedTime: {} };
+    config.metadata.elapsedTime.start = Date.now();
+    console.log("Axious request begins:", config);
+    return config;
+  },
+  (error) => {
+    console.log("Axious request failed:", error);
+    return error;
+  }
+);
 
+axios.interceptors.response.use(
+  (response) => {
+    const elapsedTime = response.config.metadata.elapsedTime;
+    elapsedTime.end = Date.now();
+    elapsedTime.total = elapsedTime.end - elapsedTime.start;
+    console.log(`The request took ${elapsedTime.total} ms.`);
+    return response;
+  },
+  (error) => {
+    console.log("axios.interceptors.request:", "error", error);
+    return error;
+  }
+);
 /**
  * 6. Next, we'll create a progress bar to indicate the request is in progress.
  * - The progressBar element has already been created for you.
