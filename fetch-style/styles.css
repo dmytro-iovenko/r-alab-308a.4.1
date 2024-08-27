@@ -1,0 +1,503 @@
+html,
+body {
+  height: 100%;
+}
+
+body {
+  background-color: lightgray;
+}
+
+.progress-bar-top {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 0%;
+  height: 15px;
+  background-color: green;
+  border-bottom: 1px solid black;
+}
+
+.favourite-button {
+  position: absolute;
+  top: 10px;
+  right: 15px;
+  z-index: 99999;
+  width: 30px;
+  height: 30px;
+  color: lightpink;
+  cursor: pointer;
+  transition: all ease 0.2s;
+}
+.favourite-button:hover {
+  color: red;
+  width: 36px;
+  height: 36px;
+  top: 7px;
+  right: 12px;
+}
+
+.carousel-inner {
+  padding: 1em;
+}
+.card {
+  margin: 0 0.5em;
+  box-shadow: 2px 6px 8px 0 rgba(22, 22, 26, 0.18);
+  border: none;
+}
+.carousel-control-prev,
+.carousel-control-next {
+  background-color: #e1e1e1;
+  width: 6vh;
+  height: 6vh;
+  border-radius: 50%;
+  top: 50%;
+  transform: translateY(-50%);
+}
+.card .img-wrapper {
+  max-width: 100%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+.card img {
+  max-height: 100%;
+  height: calc(70vw);
+  object-fit: cover;
+}
+
+/*** infoDump ***/
+#infoDump > div {
+  background: #fff;
+  padding: 1em;
+  margin: 1em;
+  border-radius: 8px;
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+}
+#infoDump h1 {
+  color: #333;
+}
+#infoDump a {
+  color: #0066cc;
+  text-decoration: none;
+}
+#infoDump a:hover {
+  text-decoration: underline;
+}
+#infoDump .section {
+  margin-bottom: 20px;
+}
+#infoDump .section h2 {
+  border-bottom: 2px solid #333;
+  padding-bottom: 10px;
+  margin-bottom: 10px;
+  color: #555;
+}
+#infoDump .section p {
+  margin: 0;
+  padding: 0;
+}
+/* Attributes */
+#infoDump .attributes {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5em;
+}
+#infoDump .attributes .attribute {
+  flex: 1;
+  min-width: 100%;
+  background: #e0e0e0;
+  padding: 10px;
+  border-radius: 4px;
+}
+#infoDump .attributes .attribute h3 {
+  margin-top: 0;
+  text-transform: capitalize;
+}
+
+@media (min-width: 768px) {
+  :root {
+    --num-images: 3;
+  }
+  .carousel-item {
+    width: calc(100% / var(--num-images)); /* number of items is 3 */
+  }
+
+  .card img {
+    height: calc(100vw / var(--num-images));
+  }
+
+  /** IF ONLY 2 IMAGES **/
+  .carousel-inner:has(.carousel-item:first-child + .carousel-item:last-child)
+    .carousel-item {
+    margin-left: calc(50% / var(--num-images)); /* center 2 images */
+  }
+
+  /** IF ONLY 1 IMAGE **/
+  .carousel-inner:has(.carousel-item:first-child:last-child) .carousel-item {
+    margin-left: calc(100% / var(--num-images)); /* center 1 image */
+  }
+
+  .carousel-item.active {
+    display: block;
+  }
+
+  .carousel-item:has(+ .carousel-item.active) {
+    display: block;
+    transform: translateX(-100%);
+  }
+
+  /* ...  ~ .carousel-item:nth-child(3) ~ - to exclude 2 and 3 images carousels*/
+  .carousel-item.active:first-child:not(.carousel-item-start)
+    ~ .carousel-item:nth-child(3)
+    ~ .carousel-item:last-child:not(.carousel-item-end) {
+    display: block;
+    transform: translateX(-100%);
+    transition: all 1ms;
+  }
+
+  .carousel-item.active + .carousel-item {
+    display: block;
+    transform: translateX(100%);
+  }
+
+  .carousel-item.active + .carousel-item + .carousel-item {
+    display: block;
+    transform: translateX(200%);
+  }
+
+  .carousel-item.active + .carousel-item + .carousel-item + .carousel-item {
+    display: block;
+    transform: translateX(300%);
+  }
+
+  /** **/
+
+  /* .carousel-inner:has(.carousel-item.active:last-child:not(.carousel-item-start):not(.carousel-item-end)) .carousel-item:first-child:not(:has(+ .carousel-item:last-child)) { */
+  .carousel-inner:has(
+      .carousel-item:not(:first-child)
+        + .carousel-item
+        + .carousel-item.active:last-child:not(.carousel-item-start):not(
+          .carousel-item-end
+        )
+    )
+    .carousel-item:first-child:not(:has(+ .carousel-item:last-child)) {
+    display: block;
+    transform: translateX(100%);
+  }
+
+  .carousel-inner:has(
+      .carousel-item:not(:first-child)
+        + .carousel-item
+        + .carousel-item.active:last-child:not(.carousel-item-start):not(
+          .carousel-item-end
+        )
+    )
+    .carousel-item:first-child
+    + .carousel-item:not(.active):not(:last-child) {
+    display: block;
+    transform: translateX(200%);
+  }
+
+  /* :has(.carousel-item:nth-child(5)) - only apply if more then 4 images in carousel */
+  .carousel-inner:has(.carousel-item:nth-child(5)):has(
+      .carousel-item.active:not(.carousel-item-start):not(
+          .carousel-item-end
+        ):last-child
+    )
+    .carousel-item:first-child
+    ~ .carousel-item:nth-child(3) {
+    display: block;
+    transform: translateX(300%);
+  }
+
+  /* .carousel-inner:has(...) - to exclude 2 images carousel*/
+  /* .carousel-inner:has(.carousel-item.active:not(.carousel-item-start):not(.carousel-item-end) + .carousel-item:not(.active):last-child) .carousel-item:first-child:not(.active) { */
+  .carousel-inner:has(
+      .carousel-item:not(:first-child)
+        + .carousel-item.active:not(.carousel-item-start):not(
+          .carousel-item-end
+        )
+        + .carousel-item:not(.active):last-child
+    )
+    .carousel-item:first-child:not(.active) {
+    display: block;
+    transform: translateX(200%);
+  }
+
+  /* .carousel-item:first-child + .carousel-item:not(:last-child) - to handle only 2 images carousel*/
+  /* :has(.carousel-item:nth-child(5)) - only apply if more then 4 images in carousel */
+  /* .carousel-inner:has(.carousel-item.active:nth-last-child(2)) .carousel-item:first-child + .carousel-item:not(.active):not(:last-child) { */
+  .carousel-inner:has(.carousel-item:nth-child(5)):has(
+      .carousel-item.active:not(.carousel-item-start):not(.carousel-item-end)
+        + .carousel-item:not(.active):last-child
+    )
+    .carousel-item:first-child
+    + .carousel-item:not(.active):not(:last-child) {
+    display: block;
+    transform: translateX(300%);
+  }
+
+  /* :not(.active) - to handle only 3 images in carousel */
+  /* :has(.carousel-item:nth-child(5)) - only apply if more then 4 images in carousel */
+  .carousel-inner:has(.carousel-item:nth-child(5)):has(
+      .carousel-item.active:nth-last-child(3):not(.carousel-item-start):not(
+          .carousel-item-end
+        )
+    )
+    .carousel-item:first-child:not(.active) {
+    display: block;
+    transform: translateX(300%);
+  }
+
+  /** NEXT BUTTON **/
+  .carousel-item:has(+ .carousel-item.active.carousel-item-start) {
+    display: none;
+  }
+  .carousel-inner:has(.carousel-item.active.carousel-item-start:first-child)
+    .carousel-item:last-child {
+    display: none;
+  }
+
+  .carousel-item.active.carousel-item-start + .carousel-item {
+    display: block;
+    transform: translateX(0);
+  }
+
+  .carousel-item.active.carousel-item-start + .carousel-item + .carousel-item {
+    display: block;
+    transform: translateX(100%);
+  }
+
+  .carousel-item.active.carousel-item-start
+    + .carousel-item
+    + .carousel-item
+    + .carousel-item {
+    display: block;
+    transform: translateX(200%);
+  }
+
+  /* .carousel-inner:has(.carousel-item.active.carousel-item-start:last-child) .carousel-item:first-child { */
+  .carousel-inner:has(
+      .carousel-item:not(:first-child)
+        + .carousel-item
+        + .carousel-item.active.carousel-item-start:last-child
+    )
+    .carousel-item:first-child {
+    display: block;
+    transform: translateX(0);
+  }
+
+  .carousel-inner:has(.carousel-item.active.carousel-item-start:last-child)
+    .carousel-item:first-child
+    + .carousel-item:not(:last-child) {
+    display: block;
+    transform: translateX(100%);
+  }
+
+  .carousel-inner:has(.carousel-item.active.carousel-item-start:last-child)
+    .carousel-item:first-child
+    ~ .carousel-item:nth-child(3) {
+    display: block;
+    transform: translateX(200%);
+  }
+
+  .carousel-inner:has(
+      .carousel-item:not(:first-child)
+        + .carousel-item.active.carousel-item-start:nth-last-child(2)
+    )
+    .carousel-item:first-child {
+    display: block;
+    transform: translateX(100%);
+  }
+
+  .carousel-inner:has(
+      .carousel-item.active.carousel-item-start:nth-last-child(2)
+    )
+    .carousel-item:first-child
+    + .carousel-item:not(:last-child) {
+    display: block;
+    transform: translateX(200%);
+  }
+
+  /* .carousel-inner:has(.carousel-item.active.carousel-item-start:nth-last-child(2)) .carousel-item:first-child + .carousel-item:last-child {
+    display: block;
+    transform: translateX(0);
+  } */
+
+  .carousel-inner:has(
+      .carousel-item.active.carousel-item-start:nth-last-child(3):not(
+          :first-child
+        )
+    )
+    .carousel-item:first-child {
+    display: block;
+    transform: translateX(200%);
+  }
+
+  /** PREV BUTTON **/
+  .carousel-item:has(+ .carousel-item.active.carousel-item-end) {
+    display: block;
+    transform: translateX(0);
+  }
+
+  .carousel-inner:has(.carousel-item.active.carousel-item-end:first-child)
+    .carousel-item:last-child {
+    display: block;
+    transform: translateX(0);
+  }
+
+  .carousel-item.active.carousel-item-end {
+    display: block;
+    transform: translateX(100%);
+  }
+
+  .carousel-inner:has(.carousel-item.active.carousel-item-end:last-child)
+    .carousel-item:first-child:not(.carousel-item-end) {
+    display: block;
+    transform: translateX(200%);
+  }
+
+  .carousel-inner:has(.carousel-item.active.carousel-item-end:last-child)
+    .carousel-item:first-child
+    + .carousel-item:not(:last-child) {
+    display: block;
+    transform: translateX(300%);
+  }
+
+  .carousel-inner:has(
+      .carousel-item:not(:first-child)
+        + .carousel-item.active.carousel-item-end:nth-last-child(2)
+    )
+    .carousel-item:first-child:not(:has(+ .carousel-item:last-child)) {
+    display: block;
+    transform: translateX(300%);
+  }
+
+  .carousel-inner:has(.carousel-item:nth-child(5)):has(
+      .carousel-item.active.carousel-item-end:last-child
+    )
+    .carousel-item:first-child
+    + .carousel-item
+    + .carousel-item:not(:last-child) {
+    display: none;
+  }
+
+  .carousel-inner:has(.carousel-item:nth-child(5)):has(
+      .carousel-item.active.carousel-item-end:nth-last-child(2)
+    )
+    .carousel-item:first-child
+    + .carousel-item:not(:last-child) {
+    display: none;
+  }
+
+  .carousel-inner:has(.carousel-item:nth-child(5)):has(
+      .carousel-item.active.carousel-item-end:nth-last-child(3)
+    )
+    .carousel-item:first-child {
+    display: none;
+  }
+
+  .carousel-item.active.carousel-item-end + .carousel-item {
+    display: block;
+    transform: translateX(200%);
+  }
+
+  .carousel-item.active.carousel-item-end + .carousel-item + .carousel-item {
+    display: block;
+    transform: translateX(300%);
+  }
+
+  .carousel-item.active.carousel-item-end
+    + .carousel-item
+    + .carousel-item
+    + .carousel-item {
+    display: none;
+  }
+  /** PREV BUTTON : 2 IMAGES **/
+  /* .carousel-inner:has(.carousel-item.active.carousel-item-end:first-child + .carousel-item:last-child) .carousel-item:first-child {
+    display: block;
+    transform: translateX(100%);
+  } */
+
+  /** 4 images in carousel **/
+  /* .carousel-inner:has(.carousel-item:nth-child(4)):not(:has(.carousel-item:nth-child(5))) .carousel-item:has(+ .carousel-item.active) { */
+  /* .carousel:not(:has(.carousel-control-next:active)) .carousel-inner:not(:has(.carousel-item-start)) .carousel-item:has(+ .carousel-item.active) { */
+  .carousel:not(:has(.carousel-control-next:active))
+    .carousel-inner:has(.carousel-item:nth-child(4)):not(
+      :has(.carousel-item:nth-child(5))
+    ):not(:has(.carousel-item-start))
+    .carousel-item:has(+ .carousel-item.active) {
+    /* border: 2px solid blue; */
+    /* visibility: hidden; */
+    /* transform: translateX(300%); */
+  }
+
+  /** NEXT BUTTON: 4 images in carousel **/
+  /* if next button click & first image is active - instantly move last image to the end) */
+  .carousel:has(.carousel-control-next:active)
+    .carousel-item.active:not(.carousel-item-start):first-child
+    ~ .carousel-item:nth-child(4):last-child {
+    display: block;
+    transform: translateX(300%);
+    transition: all 0s;
+  }
+  /* if next button click & image is active - instantly move previous image to the end */
+  .carousel:has(.carousel-control-next:active)
+    .carousel-inner:has(.carousel-item:nth-child(4):last-child)
+    .carousel-item:has(+ .carousel-item.active:not(.carousel-item-start)) {
+    display: block;
+    transform: translateX(300%);
+    transition: all 0s;
+  }
+  .carousel-item.active.carousel-item-start:first-child
+    ~ .carousel-item:nth-child(4):last-child {
+    display: block;
+    transform: translateX(200%);
+  }
+
+  /** Disable images rotation when there are only 2 images in carousel **/
+  .carousel-inner:has(.carousel-item:first-child + .carousel-item:last-child)
+    .carousel-item:first-child {
+    display: block;
+    transform: translateX(0);
+  }
+  .carousel-inner:has(.carousel-item:first-child + .carousel-item:last-child)
+    .carousel-item:last-child {
+    display: block;
+    transform: translateX(100%);
+  }
+
+  /** Disable images rotation when there are only 3 images in carousel **/
+  .carousel-inner:has(
+      .carousel-item:first-child + .carousel-item + .carousel-item:last-child
+    )
+    .carousel-item:first-child {
+    display: block;
+    transform: translateX(0);
+  }
+  .carousel-inner:has(
+      .carousel-item:first-child + .carousel-item + .carousel-item:last-child
+    )
+    .carousel-item:first-child
+    + .carousel-item {
+    display: block;
+    transform: translateX(100%);
+  }
+  .carousel-inner:has(
+      .carousel-item:first-child + .carousel-item + .carousel-item:last-child
+    )
+    .carousel-item:last-child {
+    display: block;
+    transform: translateX(200%);
+  }
+
+  /** Hide navigation buttons when the carousel has 3 or fewer items **/
+  .carousel:not(:has(.carousel-item:nth-child(4))) > button {
+    display: none;
+  }
+
+  /*** infoDump ***/
+  #infoDump .attributes .attribute {
+    min-width: calc((100vw / 3) - 4em);
+  }
+}
