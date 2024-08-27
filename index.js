@@ -137,7 +137,9 @@ async function loadImagesToCarousel(id) {
   const infoDumpTitle = infoDumpItem.querySelector("h1");
   infoDumpTitle.textContent = info.name;
   // Add alternative names, if any
-  info.alt_names.trim() && (infoDumpTitle.textContent += " (" + info.alt_names + ")");
+  info.alt_names &&
+    info.alt_names.trim() &&
+    (infoDumpTitle.textContent += " (" + info.alt_names + ")");
   // Update <p> element with breed description
   const infoDumpDescription = infoDumpItem.querySelector(
     ".section:first-of-type > h2 + p"
