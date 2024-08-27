@@ -5,6 +5,20 @@ import axios from "axios";
 const API_KEY = process.env.API_KEY; // use environment variable defined in .env file
 const API_URL = "https://api.thecatapi.com/v1";
 
+// Create helper arrays
+const levels = ["N/A", "Very Low", "Low", "Moderate", "High", "Very High"];
+const attrs = [
+  "origin",
+  "weight",
+  "life_span",
+  "temperament",
+  "grooming",
+  "energy_level",
+  "social_needs",
+  "child_friendly",
+  "dog_friendly",
+];
+
 // Use DOMContentLoaded event to run JavaScript code as soon as the page's HTML has been loaded
 document.addEventListener("DOMContentLoaded", () => {
   // The breed selection input element.
@@ -119,10 +133,52 @@ async function loadImagesToCarousel(id) {
   const infoDumpTitle = infoDumpItem.querySelector("h1");
   infoDumpTitle.textContent = info.name;
   // Add alternative names, if any
-  (info.alt_names) && (infoDumpTitle.textContent += " (" + info.alt_names + ")");
+  info.alt_names && (infoDumpTitle.textContent += " (" + info.alt_names + ")");
   // Update <p> element with breed description
-  const infoDumpDescription = infoDumpItem.querySelector(".section:first-of-type > h2 + p");
-  infoDumpDescription.textContent = info.description
+  const infoDumpDescription = infoDumpItem.querySelector(
+    ".section:first-of-type > h2 + p"
+  );
+  infoDumpDescription.textContent = info.description;
+  // Get <attributes> element
+  const infoDumpAttributes = infoDumpItem.querySelector(".attributes");
+  // Create empty attribute
+  const attrTemplate = document.createElement("div");
+  attrTemplate.classList.add("attribute");
+  attrTemplate.appendChild(document.createElement("h3"));
+  attrTemplate.appendChild(document.createElement("p"));
+  // Loop through attr array to collect properties from object and render attr
+  attrs.map((attr) =>
+    infoDumpAttributes.appendChild(createAttr(attrTemplate, attr, info))
+  );
+
+  // Function to create attribute element and fill out data
+  function createAttr(template, prop, data) {
+    const attr = template.cloneNode(true);
+    attr.querySelector("h3").textContent = prop.split("_").join(" ");
+    switch (prop) {
+      case "weight":
+        console.log(data[prop])
+        attr.querySelector("p").textContent =
+          data[prop].imperial + " lbs (" + data[prop].metric + " kg)";
+        break;
+      case "life_span":
+        attr.querySelector("p").textContent = data[prop] + " years";
+        break;
+      case "origin":
+      case "temperament":
+        attr.querySelector("p").textContent = data[prop];
+        break;
+      case "grooming":
+      case "energy_level":
+      case "social_needs":
+      case "child_friendly":
+      case "dog_friendly":
+        attr.querySelector("p").textContent = levels[data[prop]];
+        break;
+    }
+    return attr;
+  }
+
   // Render infoDump content
   infoDump.appendChild(infoDumpItem);
 }
