@@ -1,9 +1,9 @@
 import * as Carousel from "./Carousel.js";
 import axios from "axios";
 
-// Step 0: Store API key and API url for reference and easy access.
-const API_KEY = process.env.API_KEY; // use environment variable defined in .env file
-const API_URL = "https://api.thecatapi.com/v1";
+// Set a default base URL and default header with API key
+axios.defaults.headers.common["x-api-key"] = process.env.API_KEY; // use environment variable defined in .env file
+axios.defaults.baseURL = "https://api.thecatapi.com/v1/";
 
 // Create helper arrays
 const levels = ["N/A", "Very Low", "Low", "Moderate", "High", "Very High"];
@@ -39,20 +39,24 @@ document.addEventListener("DOMContentLoaded", () => {
    * This function should execute immediately.
    */
   (async function initialLoad() {
-    // Retrieve a list of breeds from the cat API using fetch()
-    const data = await fetch(`${API_URL}/breeds`);
-    const breeds = await data.json();
+    try {
+      // Retrieve a list of breeds from the cat API using fetch()
+      const response = await axios(`breeds`);
+      const breeds = await response.data;
 
-    // Clear breedSelect before populate new items
-    breedSelect.textContent = "";
+      // Clear breedSelect before populate new items
+      breedSelect.textContent = "";
 
-    // Create new <options> for each of these breeds, and append them to breedSelect.
-    breeds.forEach((breed) => {
-      breedSelect.appendChild(createOption(breed.id, breed.name));
-    });
+      // Create new <options> for each of these breeds, and append them to breedSelect.
+      breeds.forEach((breed) => {
+        breedSelect.appendChild(createOption(breed.id, breed.name));
+      });
 
-    // Initial load breed images to carousel
-    loadImagesToCarousel(breedSelect.value);
+      // Initial load breed images to carousel
+      loadImagesToCarousel(breedSelect.value);
+    } catch (error) {
+      console.log(error);
+    }
 
     // Helper function to create new <options> element
     function createOption(id, name) {
@@ -82,108 +86,105 @@ document.addEventListener("DOMContentLoaded", () => {
    * - Add a call to this function to the end of your initialLoad function above to create the initial carousel.
    */
   breedSelect.addEventListener("change", async (event) => {
-    // Get id from <select> element value
-    const id = event.target.value;
-    // Load breed images to carousel
-    loadImagesToCarousel(id);
+    try {
+      // Get id from <select> element value
+      const id = event.target.value;
+      // Load breed images to carousel
+      loadImagesToCarousel(id);
+    } catch (error) {
+      console.log(error);
+    }
   });
 });
 
 // Helper function to fetch breed images from Cat API and updates the carousel with them.
 async function loadImagesToCarousel(id) {
-  try {
-    // Fetch images for selected breed ID using Cat API
-    const imagesPromise = axios.get(
-      `${API_URL}/images/search?limit=100&breed_ids=${id}`,
-      { headers: { "x-api-key": API_KEY } }
-    );
-    // Fetch detailed info for selected breed ID using Cat API
-    const infoPromise = axios.get(`${API_URL}/breeds/${id}`);
-    // Get images data and info data simultaneously
-    [imagesData, infoData] = await Promise.all([imagesPromise, infoPromise]);
-    console.log(imagesData, infoData);
-    // Parse the JSON response from the info data into info object
-    const info = await infoData.data;
-    // Parse the JSON response from the images data into images array
-    const images = await imagesData.data;
-    // If there are only 4 images, duplicate them to ensure smooth rotation on wide screen
-    images.length === 4 && images.push(...images);
-    // Get carousel element by ID
-    const carousel = document.getElementById("carouselInner");
-    // Clear carousel before populate new items
-    carousel.textContent = "";
-    // For each image in the response array, create a new element and append it to the carousel
-    images.forEach((image, index) => {
-      // Create carousel item using HTML template
-      const carouselItem = document
-        .getElementById("carouselItemTemplate")
-        .content.firstElementChild.cloneNode(true);
-      // Activate the first element
-      if (index === 0) {
-        carouselItem.classList.add("active");
-      }
-      // Update the element's image with the URL from the API response.
-      const carouselItemImage = carouselItem.querySelector("img");
-      carouselItemImage.src = image.url;
-      // Append each of these new elements to the carousel
-      carousel.appendChild(carouselItem);
-    });
-    // Clean infoDump
-    infoDump.textContent = "";
-    // Create infoDump item using HTML template
-    const infoDumpItem = document
-      .getElementById("infoDumpTemplate")
+  // Fetch images for selected breed ID using Cat API
+  const imagesPromise = axios.get(`images/search?limit=100&breed_ids=${id}`);
+  // Fetch detailed info for selected breed ID using Cat API
+  const infoPromise = axios.get(`breeds/${id}`);
+  // Get images data and info data simultaneously
+  [imagesData, infoData] = await Promise.all([imagesPromise, infoPromise]);
+  console.log(imagesData, infoData);
+  // Parse the JSON response from the info data into info object
+  const info = await infoData.data;
+  // Parse the JSON response from the images data into images array
+  const images = await imagesData.data;
+  // If there are only 4 images, duplicate them to ensure smooth rotation on wide screen
+  images.length === 4 && images.push(...images);
+  // Get carousel element by ID
+  const carousel = document.getElementById("carouselInner");
+  // Clear carousel before populate new items
+  carousel.textContent = "";
+  // For each image in the response array, create a new element and append it to the carousel
+  images.forEach((image, index) => {
+    // Create carousel item using HTML template
+    const carouselItem = document
+      .getElementById("carouselItemTemplate")
       .content.firstElementChild.cloneNode(true);
+    // Activate the first element
+    if (index === 0) {
+      carouselItem.classList.add("active");
+    }
+    // Update the element's image with the URL from the API response.
+    const carouselItemImage = carouselItem.querySelector("img");
+    carouselItemImage.src = image.url;
+    // Append each of these new elements to the carousel
+    carousel.appendChild(carouselItem);
+  });
+  // Clean infoDump
+  infoDump.textContent = "";
+  // Create infoDump item using HTML template
+  const infoDumpItem = document
+    .getElementById("infoDumpTemplate")
+    .content.firstElementChild.cloneNode(true);
 
-    // Update <h1> element with title
-    const infoDumpTitle = infoDumpItem.querySelector("h1");
-    infoDumpTitle.textContent = info.name;
-    // Add alternative names, if any
-    info.alt_names &&
-      info.alt_names.trim() &&
-      (infoDumpTitle.textContent += " (" + info.alt_names + ")");
-    // Update <p> element with breed description
-    const infoDumpDescription = infoDumpItem.querySelector(
-      ".section:first-of-type > h2 + p"
+  // Update <h1> element with title
+  const infoDumpTitle = infoDumpItem.querySelector("h1");
+  infoDumpTitle.textContent = info.name;
+  // Add alternative names, if any
+  info.alt_names &&
+    info.alt_names.trim() &&
+    (infoDumpTitle.textContent += " (" + info.alt_names + ")");
+  // Update <p> element with breed description
+  const infoDumpDescription = infoDumpItem.querySelector(
+    ".section:first-of-type > h2 + p"
+  );
+  infoDumpDescription.textContent = info.description;
+  // Get <attributes> element
+  const infoDumpAttributes = infoDumpItem.querySelector(".attributes");
+  // Create empty attribute
+  const attrTemplate = document.createElement("div");
+  attrTemplate.classList.add("attribute");
+  attrTemplate.appendChild(document.createElement("h3"));
+  attrTemplate.appendChild(document.createElement("p"));
+  // Loop through attr array to collect properties from object and render attr
+  attrs.map((attr) =>
+    infoDumpAttributes.appendChild(createAttr(attrTemplate, attr, info))
+  );
+  // Add additional information (links)
+  const infoDumpAdditionalInfo = infoDumpItem.querySelector(
+    ".section:last-of-type > h2 + p"
+  );
+  const resources = [];
+  // if 'vetstreet_url' exists, create VetStreet Page link
+  info.vetstreet_url &&
+    resources.push(
+      createResourceLink(info.vetstreet_url, `VetStreet ${info.name} page`)
+        .outerHTML
     );
-    infoDumpDescription.textContent = info.description;
-    // Get <attributes> element
-    const infoDumpAttributes = infoDumpItem.querySelector(".attributes");
-    // Create empty attribute
-    const attrTemplate = document.createElement("div");
-    attrTemplate.classList.add("attribute");
-    attrTemplate.appendChild(document.createElement("h3"));
-    attrTemplate.appendChild(document.createElement("p"));
-    // Loop through attr array to collect properties from object and render attr
-    attrs.map((attr) =>
-      infoDumpAttributes.appendChild(createAttr(attrTemplate, attr, info))
+  // if 'wikipedia_url' exists, create Wikipedia article link
+  info.wikipedia_url &&
+    resources.push(
+      createResourceLink(info.wikipedia_url, `Wikipedia article`).outerHTML
     );
-    // Add additional information (links)
-    const infoDumpAdditionalInfo = infoDumpItem.querySelector(
-      ".section:last-of-type > h2 + p"
-    );
-    const resources = [];
-    // if 'vetstreet_url' exists, create VetStreet Page link
-    info.vetstreet_url &&
-      resources.push(
-        createResourceLink(info.vetstreet_url, `VetStreet ${info.name} page`)
-          .outerHTML
-      );
-    // if 'wikipedia_url' exists, create Wikipedia article link
-    info.wikipedia_url &&
-      resources.push(
-        createResourceLink(info.wikipedia_url, `Wikipedia article`).outerHTML
-      );
-    // Update <p> element with breed description
-    resources.length &&
-      (infoDumpAdditionalInfo.innerHTML =
-        "For more details, visit " + resources.join(" or ") + ".");
+  // Update <p> element with breed description
+  resources.length &&
+    (infoDumpAdditionalInfo.innerHTML =
+      "For more details, visit " + resources.join(" or ") + ".");
 
-        // Render infoDump content
-    infoDump.appendChild(infoDumpItem);
-  } catch (err) {
-    console.log(err);
-  }
+  // Render infoDump content
+  infoDump.appendChild(infoDumpItem);
 
   // Function to create a resource link
   function createResourceLink(url, name) {
