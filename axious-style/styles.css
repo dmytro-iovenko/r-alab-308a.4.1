@@ -67,11 +67,15 @@ body {
 
 /*** infoDump ***/
 #infoDump > div {
-  background: #fff;
+  background-color: #fff;
   padding: 1em;
   margin: 1em;
   border-radius: 8px;
   box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+}
+#infoDump > div.error {
+  color: red;
+  background-color: lightpink;
 }
 #infoDump h1 {
   color: #333;

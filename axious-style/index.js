@@ -366,21 +366,30 @@ async function getFavourites() {
     const response = await axios.get("favourites", config);
     // Parse data from response into favourites
     const favourites = await response.data;
-    // If there are only 4 images, duplicate them to ensure smooth rotation on wide screen
-    favourites.length === 4 && favourites.push(...favourites);
     // Clear carousel before populate new items
     Carousel.clear();
     // For each image in the response array, create a new element and append it to the carousel
-    favourites.forEach((image) => {
+    favourites.forEach((item) => {
       // Create carousel item using HTML template
       const carouselItem = Carousel.createCarouselItem(
-        image.url,
-        image.id,
-        image.id
+        item.image.url,
+        "...",
+        item.image.id
       );
       // Append each of these new elements to the carousel
       Carousel.appendCarousel(carouselItem);
     });
+    // Clear infoDump
+    infoDump.innerHTML = "";
+    const div = document.createElement("div");
+    if (!favourites.length) {
+      div.textContent = "You do not have any favourite images in your list.";
+      div.classList.add("error");
+    } else {
+      breedSelect.value = "";
+      div.textContent = `You have ${favourites.length} image(s) in your favourited list.`;
+    }
+    infoDump.appendChild(div);
   } catch (error) {
     console.log("getFavourites() ERROR:", error);
   }
