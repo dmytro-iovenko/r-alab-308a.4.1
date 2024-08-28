@@ -353,7 +353,36 @@ export async function favourite(imgId) {
  *    If that isn't in its own function, maybe it should be so you don't have to
  *    repeat yourself in this section.
  */
-
+async function getFavourites() {
+  console.log("getFavourites() START");
+  try {
+    // Pass updateProgress function to the axios onDownloadProgress config option
+    const config = {
+      onDownloadProgress: updateProgress,
+    };
+    // Fetch favorited images using Cat API
+    const response = await axios.get("favourites", config);
+    // Parse data from response into favourites
+    const favourites = await response.data;
+    // If there are only 4 images, duplicate them to ensure smooth rotation on wide screen
+    favourites.length === 4 && favourites.push(...favourites);
+    // Clear carousel before populate new items
+    Carousel.clear();
+    // For each image in the response array, create a new element and append it to the carousel
+    favourites.forEach((image) => {
+      // Create carousel item using HTML template
+      const carouselItem = Carousel.createCarouselItem(
+        image.url,
+        image.id,
+        image.id
+      );
+      // Append each of these new elements to the carousel
+      Carousel.appendCarousel(carouselItem);
+    });
+  } catch (error) {
+    console.log("getFavourites() ERROR:", error);
+  }
+}
 /**
  * 10. Test your site, thoroughly!
  * - What happens when you try to load the Malayan breed?
