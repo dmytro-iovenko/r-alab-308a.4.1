@@ -19,6 +19,9 @@ const attrs = [
   "dog_friendly",
 ];
 
+// Check if Get Favorites is the current page, initially is 'false'
+let isGetFavorites = false;
+
 // Set DEBUG = true to see debug console logs
 const DEBUG = false;
 
@@ -99,6 +102,8 @@ breedSelect.addEventListener("change", async (event) => {
 
 // Helper function to fetch breed images from Cat API and updates the carousel with them.
 async function loadImagesToCarousel(id) {
+  // Set isGetFavorites to false
+  isGetFavorites = false;
   // Pass updateProgress function to the axios onDownloadProgress config option
   const config = {
     onDownloadProgress: updateProgress,
@@ -315,6 +320,8 @@ export async function favourite(imgId) {
     if (favouriteId) {
       const response = await axios.delete(`favourites/${favouriteId}`);
       DEBUG && console.log("DELETE response:", response);
+      // If current page is Get Favorites - re-render it to update favourites list
+      isGetFavorites && getFavourites();
     } else {
       const payload = {
         image_id: imgId,
@@ -360,6 +367,8 @@ getFavouritesBtn.addEventListener("click", getFavourites);
 
 async function getFavourites() {
   DEBUG && console.log("getFavourites() START");
+  // Set isGetFavorites to true
+  isGetFavorites = true;
   try {
     // Pass updateProgress function to the axios onDownloadProgress config option
     const config = {
