@@ -353,6 +353,8 @@ export async function favourite(imgId) {
  *    If that isn't in its own function, maybe it should be so you don't have to
  *    repeat yourself in this section.
  */
+getFavouritesBtn.addEventListener("click", getFavourites);
+
 async function getFavourites() {
   console.log("getFavourites() START");
   try {
