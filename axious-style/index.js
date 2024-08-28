@@ -19,6 +19,9 @@ const attrs = [
   "dog_friendly",
 ];
 
+// Set DEBUG = true to see debug console logs
+const DEBUG = false;
+
 // The breed selection input element.
 const breedSelect = document.getElementById("breedSelect");
 // The information section div element.
@@ -109,7 +112,7 @@ async function loadImagesToCarousel(id) {
   const infoPromise = axios.get(`breeds/${id}`, config);
   // Get images data and info data simultaneously
   [imagesData, infoData] = await Promise.all([imagesPromise, infoPromise]);
-  console.log(imagesData, infoData);
+  DEBUG && console.log(imagesData, infoData);
   // Parse the JSON response from the info data into info object
   const info = await infoData.data;
   // Parse the JSON response from the images data into images array
@@ -306,37 +309,37 @@ function updateProgress(progressEvent) {
  * - You can call this function by clicking on the heart at the top right of any image.
  */
 export async function favourite(imgId) {
-  console.log("favourite(), imgId:", imgId);
+  DEBUG && console.log("favourite(), imgId:", imgId);
   try {
     const favouriteId = await getFavoriteId(imgId);
     if (favouriteId) {
       const response = await axios.delete(`favourites/${favouriteId}`);
-      console.log("DELETE response:", response);
+      DEBUG && console.log("DELETE response:", response);
     } else {
       const payload = {
         image_id: imgId,
         sub_id: "R-ALAB 308A.4.1",
       };
       const response = await axios.post("favourites", payload);
-      console.log("POST response:", response);
+      DEBUG && console.log("POST response:", response);
       const data = await response.data;
-      console.log("POST data:", data);
+      DEBUG && console.log("POST data:", data);
     }
   } catch (error) {
     console.log("favourite() ERROR:", error);
   }
 
   async function getFavoriteId(imgId) {
-    console.log("getFavoriteId(), imgId:", imgId);
+    DEBUG && console.log("getFavoriteId(), imgId:", imgId);
     try {
       const response = await axios.get("favourites");
-      console.log("response:", response);
+      DEBUG && console.log("response:", response);
       const data = await response.data;
-      console.log("data:", data);
+      DEBUG && console.log("data:", data);
       const favouriteId = data
         .filter((item) => item.image_id === imgId)
         .reduce((id, item) => item.id, null);
-      console.log("favouriteId:", favouriteId);
+      DEBUG && console.log("favouriteId:", favouriteId);
       return favouriteId;
     } catch (error) {
       console.log("getFavoriteId() ERROR:", error);
@@ -356,7 +359,7 @@ export async function favourite(imgId) {
 getFavouritesBtn.addEventListener("click", getFavourites);
 
 async function getFavourites() {
-  console.log("getFavourites() START");
+  DEBUG && console.log("getFavourites() START");
   try {
     // Pass updateProgress function to the axios onDownloadProgress config option
     const config = {
