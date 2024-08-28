@@ -308,16 +308,39 @@ function updateProgress(progressEvent) {
 export async function favourite(imgId) {
   console.log("favourite(), imgId:", imgId);
   try {
-    const payload = {
-      image_id: imgId,
-      sub_id: "R-ALAB 308A.4.1",
-    };
-    const response = await axios.post("favourites", payload);
-    console.log("axious response:", response);
-    const data = await response.data;
-    console.log("axious data:", data);
+    const favouriteId = await getFavoriteId(imgId);
+    if (favouriteId) {
+      const response = await axios.delete(`favourites/${favouriteId}`);
+      console.log("DELETE response:", response);
+    } else {
+      const payload = {
+        image_id: imgId,
+        sub_id: "R-ALAB 308A.4.1",
+      };
+      const response = await axios.post("favourites", payload);
+      console.log("POST response:", response);
+      const data = await response.data;
+      console.log("POST data:", data);
+    }
   } catch (error) {
     console.log("favourite() ERROR:", error);
+  }
+
+  async function getFavoriteId(imgId) {
+    console.log("getFavoriteId(), imgId:", imgId);
+    try {
+      const response = await axios.get("favourites");
+      console.log("response:", response);
+      const data = await response.data;
+      console.log("data:", data);
+      const favouriteId = data
+        .filter((item) => item.image_id === imgId)
+        .reduce((id, item) => item.id, null);
+      console.log("favouriteId:", favouriteId);
+      return favouriteId;
+    } catch (error) {
+      console.log("getFavoriteId() ERROR:", error);
+    }
   }
 }
 
