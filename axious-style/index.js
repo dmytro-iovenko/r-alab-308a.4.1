@@ -39,7 +39,7 @@ const getFavouritesBtn = document.getElementById("getFavouritesBtn");
 (async function initialLoad() {
   try {
     // Retrieve a list of breeds from the cat API using fetch()
-    const response = await axios(`breeds`);
+    const response = await axios.get(`breeds`);
     const breeds = await response.data;
 
     // Clear breedSelect before populate new items
@@ -121,7 +121,11 @@ async function loadImagesToCarousel(id) {
   // For each image in the response array, create a new element and append it to the carousel
   images.forEach((image) => {
     // Create carousel item using HTML template
-    const carouselItem = Carousel.createCarouselItem(image.url, info.name, image.id)
+    const carouselItem = Carousel.createCarouselItem(
+      image.url,
+      info.name,
+      image.id
+    );
     // Append each of these new elements to the carousel
     Carousel.appendCarousel(carouselItem);
   });
@@ -302,7 +306,19 @@ function updateProgress(progressEvent) {
  * - You can call this function by clicking on the heart at the top right of any image.
  */
 export async function favourite(imgId) {
-  // your code here
+  console.log("favourite(), imgId:", imgId);
+  try {
+    const payload = {
+      image_id: imgId,
+      sub_id: "R-ALAB 308A.4.1",
+    };
+    const response = await axios.post("favourites", payload);
+    console.log("axious response:", response);
+    const data = await response.data;
+    console.log("axious data:", data);
+  } catch (error) {
+    console.log("favourite() ERROR:", error);
+  }
 }
 
 /**
