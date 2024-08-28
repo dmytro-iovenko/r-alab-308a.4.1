@@ -116,28 +116,17 @@ async function loadImagesToCarousel(id) {
   const images = await imagesData.data;
   // If there are only 4 images, duplicate them to ensure smooth rotation on wide screen
   images.length === 4 && images.push(...images);
-  // Get carousel element by ID
-  const carousel = document.getElementById("carouselInner");
   // Clear carousel before populate new items
-  carousel.textContent = "";
+  Carousel.clear();
   // For each image in the response array, create a new element and append it to the carousel
-  images.forEach((image, index) => {
+  images.forEach((image) => {
     // Create carousel item using HTML template
-    const carouselItem = document
-      .getElementById("carouselItemTemplate")
-      .content.firstElementChild.cloneNode(true);
-    // Activate the first element
-    if (index === 0) {
-      carouselItem.classList.add("active");
-    }
-    // Update the element's image with the URL from the API response.
-    const carouselItemImage = carouselItem.querySelector("img");
-    carouselItemImage.src = image.url;
+    const carouselItem = Carousel.createCarouselItem(image.url, info.name, image.id)
     // Append each of these new elements to the carousel
-    carousel.appendChild(carouselItem);
+    Carousel.appendCarousel(carouselItem);
   });
   // Clean infoDump
-  infoDump.textContent = "";
+  infoDump.innerHTML = "";
   // Create infoDump item using HTML template
   const infoDumpItem = document
     .getElementById("infoDumpTemplate")
@@ -205,7 +194,6 @@ async function loadImagesToCarousel(id) {
     attr.querySelector("h3").textContent = prop.split("_").join(" ");
     switch (prop) {
       case "weight":
-        console.log(data[prop]);
         attr.querySelector("p").textContent =
           data[prop].imperial + " lbs (" + data[prop].metric + " kg)";
         break;
@@ -268,7 +256,7 @@ axios.interceptors.response.use(
     elapsedTime.total = elapsedTime.end - elapsedTime.start;
     console.log(`The request took ${elapsedTime.total} ms.`);
     // remove the progress cursor style from the body element
-    document.body.style.cursor = "none";
+    document.body.style.cursor = "default";
     return response;
   },
   (error) => {
